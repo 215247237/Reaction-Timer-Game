@@ -15,18 +15,19 @@ pipeline {
 
                 // Retrieve short Git commit hash to uniquely identify the current build artefact
                 script {
-                    COMMIT_HASH = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    def COMMIT_HASH = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    env.COMMIT_HASH = COMMIT_HASH
                 }
 
                 // Build Docker image and tag with both 'latest' and unique commit hash for traceability
-                sh 'docker build -t reactionmachine:latest -t reactionmachine:${COMMIT_HASH} .'
+                sh "docker build -t reactionmachine:latest -t reactionmachine:${env.COMMIT_HASH} ."
 
                 // Sign into Docker Hub using stored Jenkins credentials and push both tags
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
                         docker push reactionmachine:latest
-                        docker push reactionmachine:${COMMIT_HASH}
+                        docker push reactionmachine:${env.COMMIT_HASH}
                     """
                 }
 
