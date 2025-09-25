@@ -51,27 +51,27 @@ pipeline {
         }
         stage('Code Quality') {
             steps {
-
+                echo 'placeholder'
             }
         }
         stage('Security') {
             steps {
-
+                echo 'placeholder'
             }
         }
         stage('Deploy') {
             steps {
-
+                echo 'placeholder'
             }
         }
         stage('Release') {
             steps {
-
+                echo 'placeholder'
             }
         }
         stage('Monitoring') {
             steps {
-
+                echo 'placeholder'
             }
         }
 
