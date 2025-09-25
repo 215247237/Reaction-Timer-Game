@@ -20,7 +20,7 @@ pipeline {
                 }
 
                 // Build Docker image and tag with both 'latest' and unique commit hash for traceability
-                sh "docker build -t reactionmachine:latest -t reactionmachine:${env.COMMIT_HASH} ."
+                sh "docker build -t s215247237/reactionmachine:latest -t s215247237/reactionmachine:${env.COMMIT_HASH} ."
 
                 // Sign into Docker Hub using stored Jenkins credentials and push both tags
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
