@@ -14,7 +14,6 @@ namespace SimpleReactionMachine
         {
             RunTests();
             Console.WriteLine("\n=====================================\nSummary: {0} tests passed out of 72", passed);
-            Console.ReadKey();
         }
 
         private static void RunTests()
