@@ -26,8 +26,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                        docker push reactionmachine:latest
-                        docker push reactionmachine:${env.COMMIT_HASH}
+                        docker push s215247237/reactionmachine:latest
+                        docker push s215247237/reactionmachine:${env.COMMIT_HASH}
                     """
                 }
 
