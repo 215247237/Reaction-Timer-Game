@@ -43,13 +43,15 @@ pipeline {
 
                 // Run NUnit tests to perform unit testing and generate test results
                 // Validates individual components including state transitions, timeouts, and display outputs
-                sh '''
-                    rm -rf TestResults
-                    mkdir -p TestResults
+                sh """
+                    set -e
+                    rm -rf "${env.WORKSPACE}/TestResults"
+                    mkdir -p "${env.WORKSPACE}/TestResults"
                     dotnet test ReactionTests/ReactionTests.csproj \
                         --configuration Release --no-build \
-                        --logger "junit;LogFilePath=TestResults/test-results.xml"
-                '''                            
+                        --logger "junit;LogFilePath=${env.WORKSPACE}/TestResults/test-results.xml"
+                    ls -la "${env.WORKSPACE}/TestResults"
+                """                      
             }
             post {
                 // Collect and report NUnit test results in Jenkins
