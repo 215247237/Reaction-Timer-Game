@@ -24,4 +24,8 @@
     <ProjectReference Include="..\ReactionTimer\timer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="JUnitTestLogger" Version="3.0.114" />
+  </ItemGroup>
+
 </Project>

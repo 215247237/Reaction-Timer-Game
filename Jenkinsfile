@@ -43,11 +43,21 @@ pipeline {
 
                 // Run NUnit tests to perform unit testing and generate test results
                 // Validates individual components including state transitions, timeouts, and display outputs
-                sh 'dotnet test ReactionTests/ReactionTests.csproj --no-build --logger "trx;LogFileName=nunit_test_results.trx"'
-
+                sh '''
+                    rm -rf TestResults
+                    mkdir -p TestResults
+                    dotnet test ReactionTests/ReactionTests.csproj \
+                        --configuration Release --no-build \
+                        --logger "junit;LogFilePath=TestResults/test-results.xml"
+                '''                            
+            }
+            post {
                 // Collect and report NUnit test results in Jenkins
                 // Provides clear pass/fail gating for pipeline progression
-                junit 'ReactionTests/TestResults/nunit_test_results.trx'                             
+                // Always publish results regardless of success or failure
+                always {
+                    junit allowEmptyResults: true, testResults: 'TestResults/*.xml'
+                }
             }
         }
         stage('Code Quality') {
