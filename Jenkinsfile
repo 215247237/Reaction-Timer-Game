@@ -82,8 +82,8 @@ sh '''
                         /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
                         /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
 
-                    dotnet restore ReactionMachineProject/ReactionMachineProject.sln
-                    dotnet build ReactionMachineProject/ReactionMachineProject.sln --no-incremental    
+                    dotnet restore ReactionMachineProject.sln
+                    dotnet build ReactionMachineProject.sln --no-incremental    
 
                     dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
                     '''
