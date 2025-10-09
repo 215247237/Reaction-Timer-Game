@@ -10,17 +10,12 @@ namespace SimpleReactionMachine
         const string TOP_RIGHT_JOINT = "┐";
         const string BOTTOM_LEFT_JOINT = "└";
         const string BOTTOM_RIGHT_JOINT = "┘";
-        const string TOP_JOINT = "┬";
-        const string BOTTOM_JOINT = "┴";
         const string LEFT_JOINT = "├";
-        const string JOINT = "┼";
         const string RIGHT_JOINT = "┤";
         const char HORIZONTAL_LINE = '─';
-        const char PADDING = ' ';
         const string VERTICAL_LINE = "│";
 
-        static private IController contoller;
-        static private IGui gui;
+        static private IController? controller;
 
         static void Main(string[] args)
         {
@@ -53,10 +48,10 @@ namespace SimpleReactionMachine
             timer.AutoReset = true;
 
             // Connect GUI with the Controller and vice versa
-            contoller = new EnhancedReactionController();
-            gui = new Gui();
-            gui.Connect(contoller);
-            contoller.Connect(gui, new RandomGenerator());
+            controller = new EnhancedReactionController();
+            IGui gui = new Gui();
+            gui.Connect(controller);
+            controller.Connect(gui, new RandomGenerator());
 
             //Reset the GUI
             gui.Init();
@@ -71,10 +66,10 @@ namespace SimpleReactionMachine
                 switch (key.Key)
                 {
                     case ConsoleKey.Enter:
-                        contoller.GoStopPressed();
+                        controller.GoStopPressed();
                         break;
                     case ConsoleKey.Spacebar:
-                        contoller.CoinInserted();
+                        controller.CoinInserted();
                         break;
                     case ConsoleKey.Escape:
                         quitePressed = true;
@@ -86,7 +81,7 @@ namespace SimpleReactionMachine
         // This event occurs every 10 msec
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            contoller.Tick();
+            controller.Tick();
         }
 
         // Internal implementation of Random Generator
