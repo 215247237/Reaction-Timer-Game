@@ -4,11 +4,10 @@ namespace SimpleReactionMachine
 {
     class EnhancedTester
     {
-        private static IController controller;
-        private static IGui gui;
-        private static string displayText;
+        private static IController? controller;
         private static int randomNumber;
         private static int passed = 0;
+        private static DummyGui gui = new DummyGui();
 
         static void Main(string[] args)
         {
@@ -19,9 +18,8 @@ namespace SimpleReactionMachine
         private static void RunTests()
         {
             controller = new EnhancedReactionController();
-            gui = new DummyGui();
             gui.Connect(controller);
-            controller.Connect(gui, new RndGenerator());
+            controller!.Connect(gui, new RndGenerator());
             gui.Init();
 
 
@@ -155,12 +153,12 @@ namespace SimpleReactionMachine
             DoGoStop("6n", controller, "Insert coin");                                              // GO/STOP pressed in DelayState, aborting game and transitioning back to IdleState
         }
 
-        private static void DoReset(string testID, IController controller, string msg)
+        private static void DoReset(string testID, IController controller, string s)
         {
             try
             {
-                controller.Init();
-                GetMessage(testID, msg);
+                controller!.Init();
+                GetMessage(testID, s, gui);
             }
             catch (Exception ex)
             {
@@ -168,12 +166,12 @@ namespace SimpleReactionMachine
             }
         }
 
-        private static void DoGoStop(string testID, IController controller, string msg)
+        private static void DoGoStop(string testID, IController controller, string s)
         {
             try
             {
-                controller.GoStopPressed();
-                GetMessage(testID, msg);
+                controller!.GoStopPressed();
+                GetMessage(testID, s, gui);
             }
             catch (Exception ex)
             {
@@ -181,12 +179,12 @@ namespace SimpleReactionMachine
             }
         }
 
-        private static void DoInsertCoin(string testID, IController controller, string msg)
+        private static void DoInsertCoin(string testID, IController controller, string s)
         {
             try
             {
-                controller.CoinInserted();
-                GetMessage(testID, msg);
+                controller!.CoinInserted();
+                GetMessage(testID, s, gui);
             }
             catch (Exception ex)
             {
@@ -194,12 +192,12 @@ namespace SimpleReactionMachine
             }
         }
 
-        private static void DoTicks(string testID, IController controller, int n, string msg)
+        private static void DoTicks(string testID, IController controller, int n, string s)
         {
             try
             {
-                for (int t = 0; t < n; t++) controller.Tick();
-                GetMessage(testID, msg);
+                for (int t = 0; t < n; t++) controller!.Tick();
+                GetMessage(testID, s, gui);
             }
             catch (Exception ex)
             {
@@ -207,26 +205,27 @@ namespace SimpleReactionMachine
             }
         }
 
-        private static void GetMessage(string testID, string msg)
+        private static void GetMessage(string testID, string s, DummyGui gui)
         {
-            if (msg.ToLower() == displayText.ToLower())
+            if (string.Equals(s, gui.DisplayText, StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("test {0}: passed successfully", testID);
                 passed++;
             }
             else
             {
-                Console.WriteLine("test {0}: failed with message ( expected {1} | received {2})", testID, msg, displayText);
+                Console.WriteLine("test {0}: failed with message ( expected {1} | received {2})", testID, s, gui.DisplayText);
             }
         }
 
-        private class DummyGui : IGui
+        private sealed class DummyGui : IGui
         {
-            private IController controller;
+            private string displayText = string.Empty;
+            public string DisplayText => displayText;
 
             public void Connect(IController controller)
             {
-                this.controller = controller;
+
             }
 
             public void Init()
@@ -234,13 +233,13 @@ namespace SimpleReactionMachine
                 displayText = "?reset?";
             }
 
-            public void SetDisplay(string msg)
+            public void SetDisplay(string s)
             {
-                displayText = msg;
+                displayText = s;
             }
         }
 
-        private class RndGenerator : IRandom
+        private sealed class RndGenerator : IRandom
         {
             public int GetRandom(int from, int to)
             {
