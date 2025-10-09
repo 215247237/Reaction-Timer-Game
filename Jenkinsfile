@@ -70,6 +70,7 @@ pipeline {
                 script {
                     withSonarQubeEnv('SonarCloud') {
                         sh '''
+                        export PATH="$PATH:$HOME/.dotnet/tools"
                         dotnet sonarscanner begin \
                             /k:"Reaction-Timer-Game" \
                             /o:"215247237" \
