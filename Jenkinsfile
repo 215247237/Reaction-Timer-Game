@@ -70,22 +70,23 @@ sh '''
             steps {
                 script {
                     withSonarQubeEnv('SonarCloud') {
-                        sh '''
-                        export PATH="$PATH:$HOME/.dotnet/tools"
-                        
-                        dotnet sonarscanner begin \
-                            /k:"Reaction-Timer-Game" \
-                            /o:"215247237" \
-                            /d:sonar.login=$SONAR_TOKEN \
-                            /d:sonar.host.url="https://sonarcloud.io" \
-                            /d:sonar.projectBaseDir="." \
-                            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-                            /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
-                        
-                        dotnet build ReactionMachineProject.sln
-                        
-                        dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
-                        '''
+                    sh '''
+                    export PATH="$PATH:$HOME/.dotnet/tools"
+                    
+                    dotnet sonarscanner begin \
+                        /k:"Reaction-Timer-Game" \
+                        /o:"215247237" \
+                        /d:sonar.login=$SONAR_TOKEN \
+                        /d:sonar.host.url="https://sonarcloud.io" \
+                        /d:sonar.projectBaseDir="$(pwd)" \
+                        /d:sonar.working.directory="$(pwd)/.sonarqube" \
+                        /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+                        /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
+
+                    dotnet build ReactionMachineProject.sln --no-incremental
+                    
+                    dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+                    '''
                     }
                 }
             }
