@@ -78,12 +78,13 @@ sh '''
                         /o:"215247237" \
                         /d:sonar.login=$SONAR_TOKEN \
                         /d:sonar.host.url="https://sonarcloud.io" \
-                        /d:sonar.projectBaseDir="ReactionMachineProject" \
+                        /d:sonar.projectBaseDir="$(pwd)/ReactionMachineProject" \
                         /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
                         /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
 
-                    dotnet build ReactionMachineProject.sln --no-incremental
-                    
+                    dotnet restore ReactionMachineProject/ReactionMachineProject.sln
+                    dotnet build ReactionMachineProject/ReactionMachineProject.sln --no-incremental    
+
                     dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
                     '''
                     }
