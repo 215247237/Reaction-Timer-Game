@@ -93,6 +93,7 @@ sh '''
                     waitForQualityGate abortPipeline: true
                 }
             }
+            }
         }
         stage('Security') {
             steps {
