@@ -16,8 +16,8 @@ namespace SimpleReactionMachine
         private int roundsCompleted = 0;                    // Tracks number of rounds completed
         private double totalReactionTime = 0;               // Tracks total reaction time of completed rounds
         private int readyTickCount = 0;                     // Tracks completed ticks in ReadyState
-        private IGui gui;
-        private IRandom rng;
+        private IGui? gui;
+        private IRandom? rng;
         private int tickCount = 0;
         private int delayDuration = 0;
         private int displayReactionTimeDuration = 0;
@@ -82,7 +82,7 @@ namespace SimpleReactionMachine
             }
         }
 
-        private class IdleState : GameState
+        private sealed class IdleState : GameState
         {
             public override void CoinInserted(EnhancedReactionController ctrl)
             {
@@ -91,7 +91,7 @@ namespace SimpleReactionMachine
             }
         }
 
-        private class ReadyState : GameState // Tick added and GoStopPressed updated
+        private sealed class ReadyState : GameState // Tick added and GoStopPressed updated
         {
             public override void Tick(EnhancedReactionController ctrl) // Added to implement 10 second timeout
             {
@@ -111,7 +111,7 @@ namespace SimpleReactionMachine
             }
         }
 
-        private class DelayState : GameState // GoStopPressed updated
+        private sealed class DelayState : GameState // GoStopPressed updated
         {
             public override void Tick(EnhancedReactionController ctrl)
             {
@@ -132,7 +132,7 @@ namespace SimpleReactionMachine
             }
         }
 
-        private class TimeReactionState : GameState // Tick and GoStopPressed updated
+        private sealed class TimeReactionState : GameState // Tick and GoStopPressed updated
         {
             public override void Tick(EnhancedReactionController ctrl) // Updated to play multiple rounds
             {
@@ -165,7 +165,7 @@ namespace SimpleReactionMachine
             }
         }
 
-        private class DisplayResultState : GameState // Handles all post-round behaviour, replacing redundant GameOverState class
+        private sealed class DisplayResultState : GameState // Handles all post-round behaviour, replacing redundant GameOverState class
         {
             public override void Tick(EnhancedReactionController ctrl)
             {
@@ -183,7 +183,7 @@ namespace SimpleReactionMachine
             }
         }
 
-        private class DisplayAverageState : GameState // Handles all post-game behaviour, replacing redundant GameOverState class
+        private sealed class DisplayAverageState : GameState // Handles all post-game behaviour, replacing redundant GameOverState class
         {
             public override void Tick(EnhancedReactionController ctrl)
             {
@@ -200,7 +200,7 @@ namespace SimpleReactionMachine
                 EndGame(ctrl);  // Skip average result display, reset counters, and transition to IdleState
             }
 
-            private void EndGame(EnhancedReactionController ctrl) // End current game and ready system for new game   
+            private static void EndGame(EnhancedReactionController ctrl) // End current game and ready system for new game   
             {
                 ctrl.roundsCompleted = 0;               // Reset all counters
                 ctrl.totalReactionTime = 0;
