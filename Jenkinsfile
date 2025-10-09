@@ -63,8 +63,26 @@ pipeline {
             }
         }
         stage('Code Quality') {
+            environment {
+                SONAR_TOKEN = credentials('SONAR_TOKEN_MACHINE')
+            }
             steps {
-                echo 'placeholder'
+                script {
+                    withSonarQubeEnv('SonarCloud') {
+                        sh '''
+                        dotnet sonarscanner begin \
+                            /k:"Reaction-Timer-Game" \
+                            /o:"215247237" \
+                            /d:sonar.login=$SONAR_TOKEN \
+                            /d:sonar.host.url="https://sonarcloud.io" \
+                            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+                            /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**" \
+                            /d:sonar.qualitygate.wait=true
+                        dotnet build ReactionMachineProject.sln
+                        dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+                        '''
+                    }
+                }
             }
         }
         stage('Security') {
