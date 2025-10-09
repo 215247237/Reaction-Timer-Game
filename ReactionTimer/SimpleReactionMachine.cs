@@ -14,6 +14,8 @@ namespace SimpleReactionMachine
         const string RIGHT_JOINT = "┤";
         const char HORIZONTAL_LINE = '─';
         const string VERTICAL_LINE = "│";
+        const string MENU_FORMAT = "{0}{1}{2}";
+        const string PROMPT_FORMAT = "{0,-20}";
 
         static private IController? controller;
 
@@ -21,25 +23,25 @@ namespace SimpleReactionMachine
         {
             // Make a menu
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("{0}{1}{2}", TOP_LEFT_JOINT, new string(HORIZONTAL_LINE, 50), TOP_RIGHT_JOINT);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", LEFT_JOINT, new string(HORIZONTAL_LINE, 50), RIGHT_JOINT);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
-            Console.WriteLine("{0}{1}{2}", BOTTOM_LEFT_JOINT, new string(HORIZONTAL_LINE, 50), BOTTOM_RIGHT_JOINT);
+            Console.WriteLine(MENU_FORMAT, TOP_LEFT_JOINT, new string(HORIZONTAL_LINE, 50), TOP_RIGHT_JOINT);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, LEFT_JOINT, new string(HORIZONTAL_LINE, 50), RIGHT_JOINT);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, VERTICAL_LINE, new string(' ', 50), VERTICAL_LINE);
+            Console.WriteLine(MENU_FORMAT, BOTTOM_LEFT_JOINT, new string(HORIZONTAL_LINE, 50), BOTTOM_RIGHT_JOINT);
 
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(5, 6);
-            Console.Write("{0,-20}", "- For Insert Coin press SPACE");
+            Console.Write(PROMPT_FORMAT, "- For Insert Coin press SPACE");
             Console.SetCursorPosition(5, 7);
-            Console.Write("{0,-20}", "- For Go/Stop action press ENTER");
+            Console.Write(PROMPT_FORMAT, "- For Go/Stop action press ENTER");
             Console.SetCursorPosition(5, 8);
-            Console.Write("{0,-20}", "- For Exit press ESC");
+            Console.Write(PROMPT_FORMAT, "- For Exit press ESC");
 
             // Create a time for Tick event
             Timer timer = new Timer(10);
@@ -79,15 +81,15 @@ namespace SimpleReactionMachine
         }
 
         // This event occurs every 10 msec
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private static void OnTimedEvent(Object? source, ElapsedEventArgs? e)
         {
-            controller.Tick();
+            controller!.Tick();
         }
 
         // Internal implementation of Random Generator
-        private class RandomGenerator : IRandom
+        private sealed class RandomGenerator : IRandom
         {
-            Random rnd = new Random(100);
+            private readonly Random rnd = new Random(100);
 
             public int GetRandom(int from, int to)
             {
@@ -96,12 +98,11 @@ namespace SimpleReactionMachine
         }
 
         // Internal implementation of GUI
-        private class Gui : IGui
+        private sealed class Gui : IGui
         {
-            private IController controller;
             public void Connect(IController controller)
             {
-                this.controller = controller;
+
             }
 
             public void Init()
@@ -109,16 +110,16 @@ namespace SimpleReactionMachine
                 SetDisplay("Start your game!");
             }
 
-            public void SetDisplay(string text)
+            public void SetDisplay(string s)
             {
-                PrintUserInterface(text);
+                PrintUserInterface(s);
             }
 
-            private void PrintUserInterface(string text)
+            private static void PrintUserInterface(string s)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.SetCursorPosition(15, 2);
-                Console.Write("{0,-20}", text);
+                Console.Write(PROMPT_FORMAT, s);
                 Console.SetCursorPosition(0, 10);
             }
         }
