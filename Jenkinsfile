@@ -43,22 +43,22 @@ pipeline {
 
                 // Run NUnit tests to perform unit testing and generate test results
                 // Validates individual components including state transitions, timeouts, and display outputs
-                sh """
-                    set -e
-                    rm -rf "${env.WORKSPACE}/TestResults"
-                    mkdir -p "${env.WORKSPACE}/TestResults"
-                    dotnet test ReactionTests/ReactionTests.csproj \
-                        --configuration Release --no-build \
-                        --logger "junit;LogFilePath=${env.WORKSPACE}/TestResults/test-results.xml"
-                    ls -la "${env.WORKSPACE}/TestResults"
-                """                      
+               sh '''
+    set -e
+    rm -rf TestResults
+    mkdir -p TestResults
+    dotnet test ReactionTests/ReactionTests.csproj \
+        --configuration Release --no-build \
+        --logger "junit;LogFilePath=TestResults/test-results.xml"
+    ls -la TestResults
+'''                   
             }
             post {
                 // Collect and report NUnit test results in Jenkins
                 // Provides clear pass/fail gating for pipeline progression
                 // Always publish results regardless of success or failure
                 always {
-                    junit allowEmptyResults: true, testResults: 'TestResults/*.xml'
+                    junit allowEmptyResults: false, testResults: 'TestResults/*.xml'
                 }
             }
         }
