@@ -78,7 +78,7 @@ sh '''
                         /o:"215247237" \
                         /d:sonar.login=$SONAR_TOKEN \
                         /d:sonar.host.url="https://sonarcloud.io" \
-                        /d:sonar.projectBaseDir="$(pwd)" \
+                        /d:sonar.projectBaseDir="ReactionMachineProject" \
                         /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
                         /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
 
@@ -87,6 +87,10 @@ sh '''
                     dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
                     '''
                     }
+
+                // Wait for SonarCloud to finish processing the analysis
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
