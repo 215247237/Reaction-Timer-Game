@@ -33,7 +33,7 @@ namespace SimpleReactionMachine
             {
                 counter = 0;
                 ctrl.currentState = newState;
-                ctrl.gui.SetDisplay(message);
+                ctrl.gui!.SetDisplay(message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace SimpleReactionMachine
         {
             if (roundsCompleted < MaxRounds) // If three rounds have not been completed
             {
-                delayDuration = rng.GetRandom(MinDelayTicks, MaxDelayTicks);                    // Get random delay time for DelayState duration
+                delayDuration = rng!.GetRandom(MinDelayTicks, MaxDelayTicks);                    // Get random delay time for DelayState duration
                 StateHelper.TransitionState(this, ref tickCount, new DelayState(), "Wait...");  // Transition to DelayState to start next round
             }
             else // If third and final round has been completed
@@ -87,7 +87,7 @@ namespace SimpleReactionMachine
             public override void CoinInserted(EnhancedReactionController ctrl)
             {
                 ctrl.currentState = new ReadyState();
-                ctrl.gui.SetDisplay("Press GO!");
+                ctrl.gui!.SetDisplay("Press GO!");
             }
         }
 
@@ -106,7 +106,7 @@ namespace SimpleReactionMachine
             public override void GoStopPressed(EnhancedReactionController ctrl) // Updated to include failsafe
             {
                 ctrl.readyTickCount = 0;    // Reset counter in case Init method not called
-                ctrl.delayDuration = ctrl.rng.GetRandom(MinDelayTicks, MaxDelayTicks);
+                ctrl.delayDuration = ctrl.rng!.GetRandom(MinDelayTicks, MaxDelayTicks);
                 StateHelper.TransitionState(ctrl, ref ctrl.tickCount, new DelayState(), "Wait...");
             }
         }
@@ -149,7 +149,7 @@ namespace SimpleReactionMachine
                 }
 
                 double liveTime = ctrl.tickCount * TickInterval;        // Calculate live timer value using tickCount
-                ctrl.gui.SetDisplay(liveTime.ToString("0.00"));         // Display live timer
+                ctrl.gui!.SetDisplay(liveTime.ToString("0.00"));         // Display live timer
                 ctrl.tickCount++;                                       // tickCount incrementation moved from start of method so first tick reads 0.00
             }
 
