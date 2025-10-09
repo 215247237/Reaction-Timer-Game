@@ -72,15 +72,18 @@ sh '''
                     withSonarQubeEnv('SonarCloud') {
                         sh '''
                         export PATH="$PATH:$HOME/.dotnet/tools"
+                        
                         dotnet sonarscanner begin \
                             /k:"Reaction-Timer-Game" \
                             /o:"215247237" \
                             /d:sonar.login=$SONAR_TOKEN \
                             /d:sonar.host.url="https://sonarcloud.io" \
+                            /d:sonar.projectBaseDir="ReactionMachineProject" \
                             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-                            /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**" \
-                            /d:sonar.qualitygate.wait=true
+                            /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
+                        
                         dotnet build ReactionMachineProject.sln
+                        
                         dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
                         '''
                     }
