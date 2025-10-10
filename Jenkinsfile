@@ -79,7 +79,7 @@ sh '''
                         /d:sonar.login=$SONAR_TOKEN \
                         /d:sonar.host.url="https://sonarcloud.io" \
                         /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-                        /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
+                        /d:sonar.exclusions='sonar.scm.exclusions.disabled=true'
 
                     dotnet restore ReactionMachineProject.sln
                     dotnet build ReactionMachineProject.sln --no-incremental    
