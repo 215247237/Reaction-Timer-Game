@@ -113,9 +113,11 @@ pipeline {
                 script {
                     // Print justification only if known ignored vulnerabilities exist
                     def ignoredVulnerability = sh(
-                        script: "grep -Eq 'will_not_fix|unfixed' trivy-report.txt",
+                        script: "grep -Eq 'superdupertest' trivy-report.txt",
                         returnStatus: true
                     )
+
+                    // will_not_fix|unfixed
 
                     if (ignoredVulnerability == 0) {
                         echo "Ignored known 'will_not_fix' or 'unfixed' vulnerability."
