@@ -118,9 +118,11 @@ pipeline {
                     )
 
                     if (ignoredVulnerability == 0) {
-                        echo "Ignored known 'will_not_fix' or 'unfixed' vulnerability."
-                        echo "This issue has been acknowledged by maintainers, and no patch is available."
-                        echo "Vulnerability is not exploitable in this app's context."
+                        sh '''
+                        echo -e "Ignored known 'will_not_fix' or 'unfixed' vulnerability.\n \
+                        This issue has been acknowledged by maintainers, and no patch is available.\n \
+                        Vulnerability is not exploitable in this app's context." >> trivy-report.txt
+                        '''
                     }
                 }
 
