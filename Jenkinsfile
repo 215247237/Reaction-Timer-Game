@@ -73,6 +73,11 @@ sh '''
                     sh '''
                     export PATH="$PATH:$HOME/.dotnet/tools"
 
+                    echo "Current directory:"
+                    pwd
+                    echo "Workspace contents:"
+                    ls -la
+
                     cd "ReactionMachineProject"
                     
                     dotnet sonarscanner begin \
