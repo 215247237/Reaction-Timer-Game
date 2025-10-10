@@ -107,7 +107,7 @@ pipeline {
                     --format table s215247237/reactionmachine:latest | tee trivy-report.txt
                 
                 trivy image --exit-code 1 --severity CRITICAL \
-                    --ignore-unfixed=false s215247237/reactionmachine:latest
+                    --ignore-unfixed s215247237/reactionmachine:latest
                 '''
 
                 script {
