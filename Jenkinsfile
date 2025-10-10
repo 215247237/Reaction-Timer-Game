@@ -79,6 +79,7 @@ sh '''
                         /d:sonar.login=$SONAR_TOKEN \
                         /d:sonar.host.url="https://sonarcloud.io" \
                         /d:sonar.projectBaseDir="$(pwd)" \
+                        /d:sonar.sources="ReactionMachineProject" \
                         /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
                         /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**"
 
