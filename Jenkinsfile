@@ -107,7 +107,7 @@ pipeline {
                     --format table s215247237/reactionmachine:latest > trivy-report.txt
                 
                 trivy image --exit-code 1 --severity CRITICAL \
-                    --ignore-unfixed s215247237/reactionmachine:latest
+                    --ignore-unfixed=false s215247237/reactionmachine:latest
                 '''
 
                 script {
@@ -118,9 +118,9 @@ pipeline {
                     )
 
                     if (ignoredVulnerability == 0) {
-                        echo "Ignored known 'will_not_fix' or 'unfixed' vulnerability."
-                        echo "This issue has been acknowledged by maintainers, and no patch is available."
-                        echo "Vulnerability is not exploitable in this app's context."
+                        echo "Ignored known 'will_not_fix' or 'unfixed' vulnerability.
+                        This issue has been acknowledged by maintainers, and no patch is available.
+                        Vulnerability is not exploitable in this app's context."
                     }
                 }
 
