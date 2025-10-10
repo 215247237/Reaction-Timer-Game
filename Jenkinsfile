@@ -106,7 +106,7 @@ pipeline {
                 trivy image --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
                      --format table s215247237/reactionmachine:latest > trivy-report.txt
                 
-                trivy image --exit-code 1 --severity CRITICAL s215247237/reactionmachine:latest || echo "No critical vulnerabilities found"
+                trivy image --exit-code 1 --severity LOW s215247237/reactionmachine:latest || echo "No critical vulnerabilities found"
                 '''
             }
         }
