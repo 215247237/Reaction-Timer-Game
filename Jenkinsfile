@@ -73,7 +73,7 @@ sh '''
                     sh '''
                     export PATH="$PATH:$HOME/.dotnet/tools"
 
-                    cd ReactionMachineProject
+                    cd "ReactionMachineProject"
                     
                     dotnet sonarscanner begin \
                         /k:"Reaction-Timer-Game" \
