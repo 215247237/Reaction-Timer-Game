@@ -98,7 +98,15 @@ sh '''
         }
         stage('Security') {
             steps {
-                echo 'placeholder'
+                echo "Checking project dependencies for known vulnerabilities using .NET"
+                sh 'dotnet list package --vulnerable || true'
+
+                echo "Scanning built Docker image for high and critical vulnerabilities using Trivy"
+                sh '''
+                docker pull s215247237/reactionmachine:latest
+                trivy image --exit-code 0 --severity HIGH,CRITICAL --format table s215247237/reactionmachine:latest > trivy-report.txt
+                trivy image --exit-code 1 --severity CRITICAL s215247237/reactionmachine:latest || echo "No critical issues found"
+                '''
             }
         }
         stage('Deploy') {
