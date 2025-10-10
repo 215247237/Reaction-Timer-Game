@@ -104,7 +104,7 @@ pipeline {
                 sh '''
                 docker pull s215247237/reactionmachine:latest
                 trivy image --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
-                    --format table s215247237/reactionmachine:latest > trivy-report.txt
+                    --format table s215247237/reactionmachine:latest | tee trivy-report.txt
                 
                 
                 '''
