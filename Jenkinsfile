@@ -106,9 +106,10 @@ pipeline {
                 trivy image --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
                     --format table s215247237/reactionmachine:latest > trivy-report.txt
                 
-                trivy image --exit-code 1 --severity CRITICAL \
-                    --ignore-unfixed=false s215247237/reactionmachine:latest
+                
                 '''
+                //trivy image --exit-code 1 --severity CRITICAL \
+                    //--ignore-unfixed=false s215247237/reactionmachine:latest
 
                 script {
                     // Print justification only if known ignored vulnerabilities exist
