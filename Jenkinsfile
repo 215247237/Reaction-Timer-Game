@@ -58,8 +58,8 @@ pipeline {
                 // Provides clear pass/fail gating for pipeline progression
                 // Always publish results regardless of success or failure
                 always {
-        junit allowEmptyResults: false, testResults: 'ReactionTests/**/TestResults/*.xml'
-                        }
+                    junit allowEmptyResults: false, testResults: 'ReactionTests/**/TestResults/*.xml'
+                }
             }
         }
         stage('Code Quality') {
@@ -103,7 +103,7 @@ pipeline {
                 echo "Scanning built Docker image for high and critical vulnerabilities using Trivy"
                 sh '''
                 docker pull s215247237/reactionmachine:latest
-                trivy image --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
+                trivy image --exit-code 0 --severity UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL \
                     --format table s215247237/reactionmachine:latest | tee trivy-report.txt
                 
                 trivy image --exit-code 1 --severity CRITICAL \
@@ -118,11 +118,11 @@ pipeline {
                     )
 
                     if (ignoredVulnerability == 0) {
-                        sh '''
+                        sh """
                         echo -e "Ignored known 'will_not_fix' or 'unfixed' vulnerability.\n \
                         This issue has been acknowledged by maintainers, and no patch is available.\n \
                         Vulnerability is not exploitable in this app's context." >> trivy-report.txt
-                        '''
+                        """
                     }
                 }
 
