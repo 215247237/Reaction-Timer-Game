@@ -110,17 +110,19 @@ pipeline {
                     --ignore-unfixed s215247237/reactionmachine:latest
                 '''
 
-                // Print justification only if known ignored vulnerabilities exist
-                def ignoredVulnerability = sh(
-                    script: "grep -Eq 'will_not_fix|unfixed' trivy-report.txt",
-                    returnStatus: true
-                )
+                script {
+                    // Print justification only if known ignored vulnerabilities exist
+                    def ignoredVulnerability = sh(
+                        script: "grep -Eq 'will_not_fix|unfixed' trivy-report.txt",
+                        returnStatus: true
+                    )
 
-                if (ignoredVulnerability == 0) {
-                    echo "Ignored known 'will_not_fix' or 'unfixed' vulnerability."
-                    echo "This issue has been acknowledged by maintainers, and no patch is available."
-                    echo "Vulnerability is not exploitable in this app's context."
-                } 
+                    if (ignoredVulnerability == 0) {
+                        echo "Ignored known 'will_not_fix' or 'unfixed' vulnerability."
+                        echo "This issue has been acknowledged by maintainers, and no patch is available."
+                        echo "Vulnerability is not exploitable in this app's context."
+                    }
+                }
 
                 echo "Security scan successful: No critical vulnerabilities found."
             }
