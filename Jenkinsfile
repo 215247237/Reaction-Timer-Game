@@ -106,7 +106,7 @@ pipeline {
                 trivy image --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
                     --format table s215247237/reactionmachine:latest > trivy-report.txt
                 
-                trivy image --exit-code 1 --severity CRITICAL \
+                trivy image --exit-code 1 --severity LOW \
                     --ignore-unfixed s215247237/reactionmachine:latest
                 '''
 
