@@ -140,6 +140,13 @@ pipeline {
                     aws configure set default.region ap-southeast-2
                     aws configure set output json
 
+                    echo "Current directory:"
+                    pwd
+                    echo "Files here:"
+                    ls -al
+                    echo "Listing everything recursively:"
+                    ls -R | grep Dockerrun
+
                     echo "Zipping Dockerrun file..."
                     zip -j deploy.zip ReactionMachineProject/Dockerrun.aws.json
 
