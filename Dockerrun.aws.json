@@ -1,5 +1,5 @@
 {
-  "AWSEBDockerrunVersion": 1,
+  "AWSEBDockerrunVersion": "1",
   "Image": {
     "Name": "s215247237/reactionmachine:latest",
     "Update": "true"
