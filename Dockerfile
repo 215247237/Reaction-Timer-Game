@@ -1,22 +1,20 @@
-# Use Microsoft’s official .NET runtime image
-FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-WORKDIR /app
-
-# Use the .NET SDK image to build project
+# Use .NET SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY . .
-RUN dotnet publish ReactionTimer/timer.csproj -c Release -o /app/publish
 
-# Final image for deployment
-FROM base AS final
+# Copy solution and project files
+COPY ReactionMachineProject.sln .
+COPY ReactionTimer/ ReactionTimer/
+
+# Restore dependencies
+RUN dotnet restore ReactionMachineProject.sln
+
+# Build and publish
+RUN dotnet publish ReactionTimer/timer.csproj -c Release -o /app
+
+# Use runtime-only image for final container
+FROM mcr.microsoft.com/dotnet/runtime:9.0
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /app .
 
-# Install Python to fake a web server
-RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
-
-# Simulate web app so Beanstalk sees the container as running
-EXPOSE 80
-ENTRYPOINT ["bash", "-c", "echo '<h1>Reaction Machine successfully deployed via Jenkins pipeline!</h1>' > index.html && python3 -m http.server 80"]
-
+ENTRYPOINT ["dotnet", "timer.dll"]
