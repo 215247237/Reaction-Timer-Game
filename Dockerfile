@@ -13,5 +13,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Simulate entrypoint so Beanstalk sees it as running
-ENTRYPOINT ["bash", "-c", "echo 'Reaction Machine Game successfully deployed via Jenkins pipeline' && tail -f /dev/null"]
+# Simulate web app so Beanstalk sees the container as running
+EXPOSE 80
+ENTRYPOINT ["bash", "-c", "echo '<h1>Reaction Machine successfully deployed via Jenkins pipeline!</h1>' > index.html && python3 -m http.server 80"]
+
