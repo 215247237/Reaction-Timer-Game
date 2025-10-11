@@ -14,7 +14,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Install Python to fake a web server
-RUN apt-get update && apt-get install -y python3
+RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
 
 # Simulate web app so Beanstalk sees the container as running
 EXPOSE 80
