@@ -141,7 +141,7 @@ pipeline {
                     aws configure set output json
 
                     echo "Zipping Dockerrun file..."
-                    zip -j deploy.zip Dockerrun.aws.json
+                    zip -j deploy.zip ReactionMachineProject/Dockerrun.aws.json
 
                     echo "Uploading to S3..."
                     aws s3 cp deploy.zip s3://elasticbeanstalk-ap-southeast-2-388660028202/deploy-v${BUILD_NUMBER}.zip
