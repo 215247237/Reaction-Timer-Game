@@ -103,7 +103,7 @@ pipeline {
                 echo "Scanning built Docker image for high and critical vulnerabilities using Trivy"
                 sh '''
                 docker pull s215247237/reactionmachine:latest
-                trivy image --exit-code 0 --severity UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL \
+                trivy image --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
                     --format table s215247237/reactionmachine:latest | tee trivy-report.txt
                 
                 trivy image --exit-code 1 --severity CRITICAL \
@@ -131,7 +131,35 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'placeholder'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'beanstalkcreds'
+                ]]) {
+                    sh '''
+                    echo "Configuring AWS CLI..."
+                    aws configure set default.region ap-southeast-2
+                    aws configure set output json
+
+                    echo "Zipping Dockerrun file..."
+                    zip -j deploy.zip Dockerrun.aws.json
+
+                    echo "Uploading to S3..."
+                    aws s3 cp deploy.zip s3://elasticbeanstalk-ap-southeast-2-388660028202/deploy-v${BUILD_NUMBER}.zip
+
+                    echo "Creating new Beanstalk application version..."
+                    aws elasticbeanstalk create-application-version \
+                        --application-name ReactionMachineGame \
+                        --version-label v${BUILD_NUMBER} \
+                        --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-2-388660028202",S3Key="deploy-v${BUILD_NUMBER}.zip"
+
+                    echo "Deploying version v${BUILD_NUMBER} to environment..."
+                    aws elasticbeanstalk update-environment \
+                        --environment-name reactionmachinegame-env \
+                        --version-label v${BUILD_NUMBER}
+
+                    echo "Deployment successfully triggered."
+                    '''
+                }
             }
         }
         stage('Release') {
