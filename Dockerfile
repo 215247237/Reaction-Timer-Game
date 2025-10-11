@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
 WORKDIR /app
 
-# Use the .NET SDK image to build your project
+# Use the .NET SDK image to build project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY . .
@@ -12,6 +12,9 @@ RUN dotnet publish ReactionTimer/timer.csproj -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+
+# Install Python to fake a web server
+RUN apt-get update && apt-get install -y python3
 
 # Simulate web app so Beanstalk sees the container as running
 EXPOSE 80
