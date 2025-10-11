@@ -148,13 +148,13 @@ pipeline {
 
                     echo "Creating new Beanstalk application version..."
                     aws elasticbeanstalk create-application-version \
-                        --application-name ReactionMachineGame \
+                        --application-name Reactionmachinegame \
                         --version-label v${BUILD_NUMBER} \
                         --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-2-388660028202",S3Key="deploy-v${BUILD_NUMBER}.zip"
 
                     echo "Deploying version v${BUILD_NUMBER} to environment..."
                     aws elasticbeanstalk update-environment \
-                        --environment-name reactionmachinegame-env \
+                        --environment-name Reactionmachinegame-env \
                         --version-label v${BUILD_NUMBER}
 
                     echo "Deployment successfully triggered."
