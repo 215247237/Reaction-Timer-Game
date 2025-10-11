@@ -1,15 +1,10 @@
 {
-  "AWSEBDockerrunVersion": 3,
-  "Images": {
-    "reactionmachine": {
-      "Name": "s215247237/reactionmachine:latest",
-      "Essential": true,
-      "Ports": [
-        {
-          "ContainerPort": 80
-        }
-      ]
-    }
-  }
+  "AWSEBDockerrunVersion": 1,
+  "Image": {
+    "Name": "s215247237/reactionmachine:latest",
+    "Update": "true"
+  },
+  "Ports": [
+    { "ContainerPort": 80 }
+  ]
 }
-
